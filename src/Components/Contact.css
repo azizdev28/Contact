@@ -39,11 +39,13 @@ select {
   align-items: center;
   gap: 20px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 .user {
   display: flex;
   align-items: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 .list {
   display: flex;
@@ -54,4 +56,5 @@ select {
   display: flex;
   gap: 20px;
   align-items: center;
+  flex-wrap: wrap;
 }

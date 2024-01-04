@@ -147,10 +147,10 @@ const ContactApp = () => {
               <li key={index}>
                 {contact.firstName} {contact.lastName} - {contact.phone} -{" "}
                 {contact.gender}
-                <button className="btn" onClick={() => deleteContact(index)}>
+                <button className="btn1" onClick={() => deleteContact(index)}>
                   Delete
                 </button>
-                <button className="btn" onClick={() => updateContact(index)}>
+                <button className="btn1" onClick={() => updateContact(index)}>
                   Update
                 </button>
               </li>
@@ -163,3 +163,5 @@ const ContactApp = () => {
 };
 
 export default ContactApp;
+
+// Inside your JSX
