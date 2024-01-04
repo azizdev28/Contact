@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Contact.css";
+
 const ContactApp = () => {
   const [contacts, setContacts] = useState([]);
   const [newContact, setNewContact] = useState({
@@ -9,26 +10,46 @@ const ContactApp = () => {
     gender: "male",
   });
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedContactIndex, setSelectedContactIndex] = useState(null);
 
+  // Load contacts from localStorage on component mount
   useEffect(() => {
     const savedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
     setContacts(savedContacts);
   }, []);
 
+  // Save contacts to localStorage whenever the contacts state changes
   useEffect(() => {
     localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewContact({
-      ...newContact,
+    setNewContact((prevContact) => ({
+      ...prevContact,
       [name]: value,
-    });
+    }));
   };
 
   const addContact = () => {
-    setContacts([...contacts, newContact]);
+    if (!newContact.firstName || !newContact.lastName || !newContact.phone) {
+      alert("Please fill out all the required fields.");
+      return;
+    }
+
+    if (selectedContactIndex === null) {
+      // If no contact is selected, add a new contact
+      setContacts((prevContacts) => [...prevContacts, newContact]);
+    } else {
+      // If a contact is selected, update the selected contact
+      setContacts((prevContacts) => {
+        const updatedContacts = [...prevContacts];
+        updatedContacts[selectedContactIndex] = newContact;
+        return updatedContacts;
+      });
+      setSelectedContactIndex(null);
+    }
+
     setNewContact({
       firstName: "",
       lastName: "",
@@ -38,21 +59,18 @@ const ContactApp = () => {
   };
 
   const deleteContact = (index) => {
-    const updatedContacts = [...contacts];
-    updatedContacts.splice(index, 1);
-    setContacts(updatedContacts);
+    setContacts((prevContacts) => {
+      const updatedContacts = [...prevContacts];
+      updatedContacts.splice(index, 1);
+      return updatedContacts;
+    });
   };
 
   const updateContact = (index) => {
-    const updatedContacts = [...contacts];
-    updatedContacts[index] = newContact;
-    setContacts(updatedContacts);
-    setNewContact({
-      firstName: "",
-      lastName: "",
-      phone: "",
-      gender: "male",
-    });
+    // Set the selected contact's data to the input fields
+    const selectedContact = contacts[index];
+    setNewContact(selectedContact);
+    setSelectedContactIndex(index);
   };
 
   const searchContacts = () => {
@@ -109,8 +127,8 @@ const ContactApp = () => {
             </select>
           </div>
           <div>
-            <button className="btn1" onClick={addContact}>
-              Add
+            <button className="btn" onClick={addContact}>
+              {selectedContactIndex === null ? "Add" : "Update"}
             </button>
           </div>
           <div>
@@ -129,10 +147,10 @@ const ContactApp = () => {
               <li key={index}>
                 {contact.firstName} {contact.lastName} - {contact.phone} -{" "}
                 {contact.gender}
-                <button className="btn1" onClick={() => deleteContact(index)}>
+                <button className="btn" onClick={() => deleteContact(index)}>
                   Delete
                 </button>
-                <button className="btn1" onClick={() => updateContact(index)}>
+                <button className="btn" onClick={() => updateContact(index)}>
                   Update
                 </button>
               </li>
