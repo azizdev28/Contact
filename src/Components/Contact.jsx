@@ -10,13 +10,11 @@ const ContactApp = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Load contacts from localStorage on component mount
   useEffect(() => {
     const savedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
     setContacts(savedContacts);
   }, []);
 
-  // Save contacts to localStorage whenever the contacts state changes
   useEffect(() => {
     localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
