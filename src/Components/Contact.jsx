@@ -12,13 +12,11 @@ const ContactApp = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
 
-  // Load contacts from localStorage on component mount
   useEffect(() => {
     const savedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
     setContacts(savedContacts);
   }, []);
 
-  // Save contacts to localStorage whenever the contacts state changes
   useEffect(() => {
     localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
@@ -38,10 +36,8 @@ const ContactApp = () => {
     }
 
     if (selectedContactIndex === null) {
-      // If no contact is selected, add a new contact
       setContacts((prevContacts) => [...prevContacts, newContact]);
     } else {
-      // If a contact is selected, update the selected contact
       setContacts((prevContacts) => {
         const updatedContacts = [...prevContacts];
         updatedContacts[selectedContactIndex] = newContact;
@@ -67,7 +63,6 @@ const ContactApp = () => {
   };
 
   const updateContact = (index) => {
-    // Set the selected contact's data to the input fields
     const selectedContact = contacts[index];
     setNewContact(selectedContact);
     setSelectedContactIndex(index);
@@ -114,18 +109,7 @@ const ContactApp = () => {
               placeholder="Phone:"
             />
           </div>
-          <div>
-            <label></label>
-            <select
-              name="gender"
-              value={newContact.gender}
-              onChange={handleInputChange}
-              placeholder="Gender:"
-            >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
+
           <div>
             <button className="btn" onClick={addContact}>
               {selectedContactIndex === null ? "Add" : "Update"}
